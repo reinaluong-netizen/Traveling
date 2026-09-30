@@ -1,648 +1,339 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Japan Travel Guide & English Learning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #c9302c;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #0284c7;
+      --accent-bg: #e0f2fe;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.05);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      padding: 0 16px 80px;
+    }
+    header {
+      max-width: 900px;
+      margin: 40px auto 32px;
+      text-align: center;
+      padding: 32px 20px;
+      background: linear-gradient(135deg, #fee2e2 0%, #fff 100%);
+      border-radius: 20px;
+      border: 1px solid #fecaca;
+    }
+    header h1 {
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 12px;
+      font-weight: 800;
+    }
+    header p { color: var(--text-muted); font-size: 1.05rem; }
+    .badge-tip {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 6px 14px;
+      background: #fff;
+      border: 1px solid #fca5a5;
+      color: var(--primary);
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 28px 32px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+    .card h2 {
+      font-size: 1.5rem;
+      color: #0f172a;
+      margin-bottom: 18px;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 12px;
+    }
+    .card h3 { font-size: 1.15rem; color: #334155; margin: 20px 0 10px; }
+    p { margin-bottom: 14px; }
+    ul { padding-left: 24px; margin-bottom: 16px; }
+    li { margin-bottom: 8px; }
+    .vocab {
+      color: var(--accent);
+      background-color: var(--accent-bg);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 1.5px dashed var(--accent);
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .vocab:hover { background-color: #bae6fd; color: #0369a1; }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-content {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 480px;
+      width: 100%;
+      padding: 28px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+    .modal-title-group h3 { font-size: 1.6rem; color: var(--primary); font-weight: 800; }
+    .modal-title-group .phonetic { font-size: 0.95rem; color: var(--text-muted); font-family: monospace; }
+    .btn-close {
+      background: #f1f5f9;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: #64748b;
+    }
+    .detail-section {
+      margin-top: 14px;
+      background: #f8fafc;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border-left: 4px solid var(--accent);
+    }
+    .detail-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .meaning-vi { font-size: 1.15rem; font-weight: 600; color: #0f172a; }
+    .example-en { font-style: italic; color: #334155; margin-top: 6px; font-size: 0.95rem; }
+    .example-vi { color: #64748b; font-size: 0.875rem; margin-top: 2px; }
+    .itinerary-day {
+      background: #fff1f2;
+      border-left: 4px solid var(--primary);
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      border-radius: 0 8px 8px 0;
+    }
   </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;Japan Travel Guide &amp; English Learning&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="preconnect" href="https://fonts.googleapis.com"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="preconnect" href="https://fonts.gstatic.com" crossorigin&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Noto+Serif+JP:wght@600&amp;display=swap" rel="stylesheet"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>:root {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>--primary: #c9302c;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>--primary-hover: #a12320;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>--bg: #f8fafc;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>--card-bg: #ffffff;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>--text: #1e293b;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>--text-muted: #64748b;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>--border: #e2e8f0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>--accent: #0284c7;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>--accent-bg: #e0f2fe;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>--shadow-sm: 0 1px 3px rgba(0,0,0,0.06);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>--shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.06);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>--shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.05);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>* { box-sizing: border-box; margin: 0; padding: 0; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-family: 'Plus Jakarta Sans', system-ui, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-color: var(--bg);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: var(--text);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>line-height: 1.75;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 0 16px 80px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>header {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>max-width: 900px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin: 40px auto 32px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 32px 20px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: linear-gradient(135deg, #fee2e2 0%, #fff 100%);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #fecaca;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>header h1 {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 2.25rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: var(--primary);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 800;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>header p {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: var(--text-muted);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.05rem;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.badge-tip {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: inline-block;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 14px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 6px 14px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #fff;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid #fca5a5;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: var(--primary);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 9999px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 0.875rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 600;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>main {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>max-width: 900px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin: 0 auto;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>gap: 24px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.card {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: var(--card-bg);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 28px 32px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: 1px solid var(--border);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: var(--shadow-sm);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.card h2 {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #0f172a;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 18px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>gap: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-bottom: 2px solid #f1f5f9;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding-bottom: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.card h3 {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.15rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #334155;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin: 20px 0 10px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>p { margin-bottom: 14px; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>p:last-child { margin-bottom: 0; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>ul, ol {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding-left: 24px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>li { margin-bottom: 8px; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>/* Interactive Vocab Word */</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.vocab {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: var(--accent);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-color: var(--accent-bg);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 2px 6px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 600;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-bottom: 1.5px dashed var(--accent);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>transition: all 0.2s ease;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: inline-block;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.vocab:hover, .vocab:focus {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background-color: #bae6fd;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #0369a1;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>transform: translateY(-1px);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>/* Modal / Popover */</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.modal-overlay {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>position: fixed;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>inset: 0;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: rgba(15, 23, 42, 0.5);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>backdrop-filter: blur(4px);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: none;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>z-index: 1000;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.modal-overlay.active { display: flex; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.modal-content {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #fff;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>max-width: 480px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 28px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>box-shadow: var(--shadow-lg);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>@keyframes popIn {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>from { opacity: 0; transform: scale(0.95); }</p>
-<p class="p1"><span class="Apple-converted-space">      </span>to { opacity: 1; transform: scale(1); }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.modal-header {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>justify-content: space-between;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>align-items: flex-start;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 16px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.modal-title-group h3 {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.6rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: var(--primary);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 800;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.modal-title-group .phonetic {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 0.95rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: var(--text-muted);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-family: monospace;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 2px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.btn-close {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #f1f5f9;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border: none;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>width: 32px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>height: 32px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 50%;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.1rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #64748b;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>transition: background 0.2s;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>.btn-close:hover { background: #e2e8f0; color: #0f172a; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.detail-section {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 14px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #f8fafc;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 14px 16px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 12px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-left: 4px solid var(--accent);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.detail-label {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 0.75rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>text-transform: uppercase;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>letter-spacing: 0.05em;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 700;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: var(--text-muted);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 4px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.meaning-vi {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 1.15rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-weight: 600;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #0f172a;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.example-en {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-style: italic;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #334155;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 6px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 0.95rem;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.example-vi {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>color: #64748b;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>font-size: 0.875rem;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-top: 2px;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>.itinerary-day {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>background: #fff1f2;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-left: 4px solid var(--primary);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>padding: 12px 16px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>margin-bottom: 10px;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>border-radius: 0 8px 8px 0;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;header&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Japan Explorer &amp; English Guide&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;p&gt;Cẩm nang du lịch Nhật Bản tương tác. Chạm vào bất kỳ từ tiếng Anh có viền xanh để xem giải nghĩa và ví dụ mẫu!&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="badge-tip"&gt;💡 Tap on blue highlighted words to learn vocabulary!&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/header&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;main&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Section 1 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;🗾 Where Is Japan Located in Asia?&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>Japan is a country in &lt;strong&gt;East Asia&lt;/strong&gt; with a &lt;span class="vocab" data-word="total area"&gt;total area&lt;/span&gt; of about 379,954 km². It is close to China, South Korea, Russia, and Taiwan. Japan is also part of the Pacific &lt;span class="vocab" data-word="Ring of Fire"&gt;Ring of Fire&lt;/span&gt; and has five main islands: &lt;strong&gt;Hokkaido, Honshu, Shikoku, Kyushu, and Okinawa&lt;/strong&gt;. These islands &lt;span class="vocab" data-word="attract"&gt;attract&lt;/span&gt; many tourists every year.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>One thing that makes visitors want to come back to Japan is the &lt;span class="vocab" data-word="local people"&gt;local people&lt;/span&gt;. Japanese people are known for being &lt;span class="vocab" data-word="friendly"&gt;friendly&lt;/span&gt;, &lt;span class="vocab" data-word="helpful"&gt;helpful&lt;/span&gt;, and &lt;span class="vocab" data-word="polite"&gt;polite&lt;/span&gt;.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Section 2 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;🌸 What Is the Best Time to Visit Japan?&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>Japan has four clear seasons because it is in a &lt;span class="vocab" data-word="temperate climate"&gt;temperate climate&lt;/span&gt; zone. However, the weather can be very different from one area to another. For example, winters in northern Hokkaido can be very cold, while the islands in southern Okinawa are warm and sunny.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>In general, &lt;strong&gt;March to May&lt;/strong&gt; and &lt;strong&gt;September to November&lt;/strong&gt; are considered good times to visit Japan.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>If you want to see beautiful &lt;span class="vocab" data-word="cherry blossoms"&gt;cherry blossoms&lt;/span&gt; and enjoy the cool weather after winter, visit Japan from &lt;strong&gt;late March to early April&lt;/strong&gt;.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>If you want to enjoy cool autumn weather, clear blue skies, soft sunlight, and colorful &lt;span class="vocab" data-word="autumn leaves"&gt;autumn leaves&lt;/span&gt;, &lt;strong&gt;late October to early November&lt;/strong&gt; is a good time to visit.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Section 3 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;🛂 Do You Need a Visa to Visit Japan?&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>Yes. Vietnamese citizens need a visa to visit Japan because Japan does not have a &lt;span class="vocab" data-word="visa-free policy"&gt;visa-free policy&lt;/span&gt; for Vietnamese citizens.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>You need to &lt;span class="vocab" data-word="apply for"&gt;apply for&lt;/span&gt; a tourist visa before your trip. According to the information in this guide, you only need to pay the visa fee after your visa application is successful.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Section 4 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;✈️ Tips for Booking a Flight to Japan&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>There are many ways to find cheap flights to Japan. First, you should plan your travel dates early and book your flight about &lt;strong&gt;one to two months before your trip&lt;/strong&gt;.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>You can also choose a &lt;span class="vocab" data-word="direct flight"&gt;direct flight&lt;/span&gt;. Direct flights may be more expensive, but they can save you time compared with flights that stop in another city.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;To find a good price, remember to:&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;Check &lt;span class="vocab" data-word="special offers"&gt;special offers&lt;/span&gt; from different airlines.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;Look for &lt;span class="vocab" data-word="discounts"&gt;discounts&lt;/span&gt; and good deals.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;Compare prices before buying a ticket.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;Book your flight early.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>Popular airlines include &lt;em&gt;Vietnam Airlines, Vietjet Air, Japan Airlines, and ANA&lt;/em&gt;. A round-trip flight from Hanoi to Tokyo may cost around 12,000,000 to 13,000,000 VND, while a round-trip from Ho Chi Minh City costs around 9,000,000 to 14,000,000 VND.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Section 5 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;🚆 Transportation in Japan&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h3&gt;1. Subway&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>The subway is one of the most popular forms of &lt;span class="vocab" data-word="public transportation"&gt;public transportation&lt;/span&gt; in Japan because it is &lt;span class="vocab" data-word="affordable"&gt;affordable&lt;/span&gt;, clear, and usually &lt;span class="vocab" data-word="on time"&gt;on time&lt;/span&gt;. Pay attention to &lt;span class="vocab" data-word="rush hour"&gt;rush hour&lt;/span&gt; in Tokyo (7:30 - 9:00 a.m. &amp; 5:00 - 7:00 p.m.).</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h3&gt;2. Bus&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>There are two main types: &lt;strong&gt;local buses and long-distance buses&lt;/strong&gt;. Most tourists use &lt;span class="vocab" data-word="IC cards"&gt;IC cards&lt;/span&gt; (such as Suica, PASMO, or ICOCA) because they make paying faster and easier. You can also purchase a &lt;span class="vocab" data-word="One-Day Pass"&gt;One-Day Pass&lt;/span&gt; for unlimited travel.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h3&gt;3. Taxi &amp; Renting a Car&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>Compared with buses, taxis are quite expensive. &lt;span class="vocab" data-word="Renting a car"&gt;Renting a car&lt;/span&gt; gives you more freedom when traveling with close friends or family at your own pace.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h3&gt;JR Pass&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>With a &lt;span class="vocab" data-word="JR Pass"&gt;JR Pass&lt;/span&gt;, you can travel easily around Japan on JR train networks across multiple regions.</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Section 6 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;⛩️ Famous Places to Visit&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Shibuya Crossing, Tokyo:&lt;/strong&gt; Famous scramble crossing with a lively view from &lt;span class="vocab" data-word="observatory"&gt;Shibuya Sky&lt;/span&gt;.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Mount Fuji:&lt;/strong&gt; Japan's highest mountain (3,776m). Popular route: Yoshida Trail or view from Lake Kawaguchi.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Onna Village Blue Cave, Okinawa:&lt;/strong&gt; A natural sea cave famous for &lt;span class="vocab" data-word="snorkeling"&gt;diving and snorkeling&lt;/span&gt;.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Taketomi Island, Okinawa:&lt;/strong&gt; White sandy roads, red-roof houses, and water buffalo carts.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Shirakawa Village:&lt;/strong&gt; Traditional houses with steep thatched roofs and historic architecture.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Tokyo Skytree:&lt;/strong&gt; Impressive 634-meter tall landmark with panoramic city views.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Tokyo Imperial Palace:&lt;/strong&gt; The serene residence of the Japanese Imperial Family.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Sensoji Temple:&lt;/strong&gt; Tokyo's oldest temple with a vibrant 200m shopping street.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Osaka Castle:&lt;/strong&gt; Famous green roof, white walls, and over 600 cherry trees.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Arashiyama Bamboo Forest, Kyoto:&lt;/strong&gt; A peaceful atmosphere with towering green bamboo.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Todai-ji Temple, Nara:&lt;/strong&gt; Giant bronze Buddha statue located in Nara Park among wild deer.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Himeji Castle:&lt;/strong&gt; Nicknamed “White Heron Castle”, a UNESCO World Heritage Site.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Kobe Harborland:&lt;/strong&gt; Scenic waterfront, Port Wheel, and romantic evening sea breezes.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Fushimi Inari Taisha:&lt;/strong&gt; Famous shrine with over 10,000 vibrant red &lt;span class="vocab" data-word="torii gates"&gt;torii gates&lt;/span&gt;.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Section 7 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;🍣 Famous Japanese Food&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>Japanese food is known for fresh ingredients, careful presentation, and delicate flavors:</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Sushi:&lt;/strong&gt; Prepared with seasoned &lt;span class="vocab" data-word="vinegar rice"&gt;vinegar rice&lt;/span&gt; and fresh seafood.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Sashimi:&lt;/strong&gt; Fresh &lt;span class="vocab" data-word="raw seafood"&gt;raw seafood&lt;/span&gt; served with wasabi and soy sauce.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Sake:&lt;/strong&gt; Traditional brewed rice wine, served warm in winter and chilled in summer.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Ramen:&lt;/strong&gt; Rich broth noodles with pork, eggs, and regional toppings.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Tempura:&lt;/strong&gt; Seafood and vegetables coated in light batter and fried crispy.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Takoyaki:&lt;/strong&gt; Crispy exterior, tender octopus balls from Osaka.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Natto:&lt;/strong&gt; &lt;span class="vocab" data-word="fermented soybeans"&gt;Fermented soybeans&lt;/span&gt; with a distinct aroma and rich nutrition.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;li&gt;&lt;strong&gt;Miso Soup:&lt;/strong&gt; Essential soup made with miso paste and dashi stock.&lt;/li&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/ul&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Section 8 --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;h2&gt;📅 Suggested 7-Day Japan Itinerary&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="itinerary-day"&gt;&lt;strong&gt;Day 1:&lt;/strong&gt; Fly to Tokyo ➔ Shinjuku &amp; dinner at Omoide Yokocho.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="itinerary-day"&gt;&lt;strong&gt;Day 2:&lt;/strong&gt; Asakusa, Tokyo Skytree, Harajuku &amp; Shibuya.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="itinerary-day"&gt;&lt;strong&gt;Day 3:&lt;/strong&gt; Mount Fuji (Kawaguchiko), Chureito Pagoda &amp; traditional onsen ryokan.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="itinerary-day"&gt;&lt;strong&gt;Day 4:&lt;/strong&gt; Shinkansen to Kyoto ➔ Fushimi Inari, Gion &amp; Arashiyama Bamboo Forest.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="itinerary-day"&gt;&lt;strong&gt;Day 5:&lt;/strong&gt; Nara Park &amp; Todai-ji Temple ➔ Osaka in the afternoon.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="itinerary-day"&gt;&lt;strong&gt;Day 6:&lt;/strong&gt; Universal Studios Japan or explore Dotonbori &amp; Shinsekai.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="itinerary-day"&gt;&lt;strong&gt;Day 7:&lt;/strong&gt; Shopping in Osaka ➔ Kansai Airport ➔ Return flight.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;p style="margin-top: 14px;"&gt;&lt;strong&gt;Estimated Budget:&lt;/strong&gt; ~28,000,000 to 35,000,000 VND / person.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/main&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- Interactive Popup Modal --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="modal-overlay" id="vocabModal"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="modal-content"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="modal-header"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="modal-title-group"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;h3 id="modalWord"&gt;Word&lt;/h3&gt;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>&lt;div class="phonetic" id="modalPhonetic"&gt;/phonetic/&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn-close" id="btnClose"&gt;&amp;times;&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="detail-section"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="detail-label"&gt;Nghĩa tiếng Việt&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="meaning-vi" id="modalMeaning"&gt;Nghĩa của từ&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="detail-section" style="border-left-color: #10b981;"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="detail-label"&gt;Ví dụ tiếng Anh (Example)&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="example-en" id="modalExampleEn"&gt;"Example sentence goes here."&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="example-vi" id="modalExampleVi"&gt;Dịch nghĩa câu ví dụ.&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const dictionary = {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"total area": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈtoʊ.t̬əl ˈer.i.ə/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Tổng diện tích",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "The total area of the national park exceeds 500 square kilometers.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Tổng diện tích của vườn quốc gia này vượt quá 500 ki-lô-mét vuông."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"Ring of Fire": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/rɪŋ əv faɪr/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Vành đai lửa (Thái Bình Dương - nơi có nhiều động đất/núi lửa)",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Japan experiences frequent earthquakes because it lies on the Pacific Ring of Fire.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Nhật Bản thường xuyên gặp động đất vì nằm trên Vành đai lửa Thái Bình Dương."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"attract": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/əˈtrækt/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Thu hút, lôi cuốn",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Ancient temples in Kyoto attract millions of tourists each year.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Những ngôi đền cổ ở Kyoto thu hút hàng triệu du khách mỗi năm."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"local people": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈloʊ.kəl ˈpiː.pəl/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Người dân địa phương",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "The local people are always eager to give directions to travelers.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Người dân địa phương luôn sẵn lòng chỉ đường cho du khách."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"friendly": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈfrend.li/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Thân thiện, cởi mở",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Everyone at the hostel was very warm and friendly.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Mọi người ở nhà nghỉ tập thể đều rất ấm áp và thân thiện."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"helpful": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈhelp.fəl/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Hay giúp đỡ, có ích",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "The hotel staff were extremely helpful during our stay.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Nhân viên khách sạn cực kỳ nhiệt tình giúp đỡ trong suốt kỳ nghỉ của chúng tôi."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"polite": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/pəˈlaɪt/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Lịch sự, nhã nhặn",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Bow gently when greeting someone to show polite manners.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Cúi đầu nhẹ khi chào ai đó để thể hiện thái độ lịch sự."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"temperate climate": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈtem.pɚ.ət ˈklaɪ.mət/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Khí hậu ôn đới",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Most of Japan enjoys a temperate climate with four distinct seasons.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Phần lớn nước Nhật có khí hậu ôn đới với bốn mùa rõ rệt."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"cherry blossoms": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈtʃer.i ˈblɑː.səmz/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Hoa anh đào (Sakura)",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "People love having outdoor picnics under the cherry blossoms in spring.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Mọi người rất thích đi dã ngoại dưới tán hoa anh đào vào mùa xuân."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"autumn leaves": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈɑː.t̬əm liːvz/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Lá mùa thu, lá đỏ (Momiji)",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Kyoto is famous for its vibrant red autumn leaves in November.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Kyoto nổi tiếng với sắc lá mùa thu đỏ rực vào tháng 11."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"visa-free policy": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈviː.zə friː ˈpɑː.lə.si/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Chính sách miễn thị thực / miễn visa",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Check whether your country benefits from Japan's visa-free policy.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Hãy kiểm tra xem quốc gia của bạn có được hưởng chính sách miễn visa của Nhật không."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"apply for": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/əˈplaɪ fɔːr/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Nộp hồ sơ, xin cấp (visa, học bổng, việc làm)",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "You should apply for your visa at least one month before your trip.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Bạn nên nộp hồ sơ xin visa ít nhất một tháng trước chuyến đi."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"direct flight": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/daɪˈrekt flaɪt/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Chuyến bay thẳng",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Taking a direct flight saves you hours of layover waiting.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Đi chuyến bay thẳng giúp bạn tiết kiệm hàng giờ chờ đợi quá cảnh."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"special offers": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈspeʃ.əl ˈɑː.fɚz/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Ưu đãi đặc biệt, khuyến mãi",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Airlines often release special offers during flash sales.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Các hãng hàng không thường tung ra những ưu đãi đặc biệt trong các đợt giảm giá chớp nhoáng."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"discounts": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈdɪs.kaʊnts/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Mức giảm giá, chiết khấu",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Early bookers can enjoy discounts of up to thirty percent.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Những người đặt sớm có thể nhận được mức giảm giá lên tới ba mươi phần trăm."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"public transportation": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˌpʌb.lɪk ˌtræn.spɚˈteɪ.ʃən/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Phương tiện giao thông công cộng",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Public transportation in Tokyo is punctual, clean, and safe.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Giao thông công cộng tại Tokyo rất đúng giờ, sạch sẽ và an toàn."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"affordable": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/əˈfɔːr.də.bəl/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Giá cả phải chăng, vừa túi tiền",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "The subway is an affordable choice for budget travelers.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Tàu điện ngầm là một lựa chọn vừa túi tiền cho du khách tiết kiệm."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"on time": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ɑːn taɪm/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Đúng giờ",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Japanese bullet trains are world-renowned for arriving on time.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Tàu cao tốc Nhật Bản nổi tiếng thế giới vì luôn đến đúng giờ."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"rush hour": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈrʌʃ ˌaʊ.ɚ/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Giờ cao điểm",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Try to avoid boarding trains during the morning rush hour.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Hãy cố gắng tránh lên tàu vào giờ cao điểm buổi sáng."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"IC cards": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/aɪ siː kɑːrdz/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Thẻ thanh toán thông minh tích hợp (Suica, Pasmo...)",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Tap your IC card at the gate to quickly enter the station.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Chạm thẻ IC vào cổng để vào ga tàu một cách nhanh chóng."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"One-Day Pass": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/wʌn deɪ pæs/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Vé thông hành 1 ngày (đi không giới hạn)",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "A One-Day Pass allows unlimited rides on local city buses.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Vé thông hành một ngày cho phép đi không giới hạn các tuyến xe buýt nội thành."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"Renting a car": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈren.tɪŋ ə kɑːr/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Thuê xe tự lái",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Renting a car is ideal for exploring the countryside of Hokkaido.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Thuê xe ô tô rất lý tưởng để khám phá vùng nông thôn Hokkaido."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"JR Pass": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/dʒeɪ ɑːr pæs/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Thẻ đường sắt toàn Nhật Bản (Japan Rail Pass)",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Activate your JR Pass at the airport before boarding the Narita Express.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Kích hoạt vé JR Pass của bạn tại sân bay trước khi lên tàu Narita Express."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"observatory": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/əbˈzɝː.və.tɔːr.i/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Đài quan sát / đài thiên văn",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "The observation deck offers a 360-degree panoramic view of Tokyo.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Đài quan sát mang đến góc nhìn toàn cảnh 360 độ ngắm trọn Tokyo."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"snorkeling": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈsnɔːr.kəl.ɪŋ/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Lặn với ống thở",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "The calm clear waters make Okinawa great for snorkeling.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Làn nước êm và trong vắt khiến Okinawa trở thành nơi tuyệt vời để lặn với ống thở."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"torii gates": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈtɔːr.iː ɡeɪts/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Cổng đền Thần đạo Torii truyền thống của Nhật Bản",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "The thousands of vermilion torii gates at Fushimi Inari lead up the sacred mountain.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Hàng ngàn chiếc cổng torii màu đỏ son tại Fushimi Inari dẫn lối lên ngọn núi thiêng."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"vinegar rice": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/ˈvɪn.ə.ɡɚ raɪs/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Cơm trộn giấm (cơm làm sushi)",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Authentic sushi requires perfectly seasoned vinegar rice.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Món sushi chuẩn vị đòi hỏi phần cơm trộn giấm được nêm nếm hoàn hảo."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"raw seafood": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/rɑː ˈsiː.fuːd/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Hải sản sống / tươi sống",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Sashimi highlights the pristine freshness of raw seafood.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Sashimi tôn vinh độ tươi ngon nguyên bản của các loại hải sản sống."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>},</p>
-<p class="p1"><span class="Apple-converted-space">      </span>"fermented soybeans": {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>phonetic: "/fɚˈmen.t̬ɪd ˈsɔɪ.biːnz/",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>meaning: "Đậu nành lên men (món Natto)",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleEn: "Natto is made from fermented soybeans and is prized for its health benefits.",</p>
-<p class="p1"><span class="Apple-converted-space">        </span>exampleVi: "Natto được làm từ đậu nành lên men và rất được coi trọng nhờ lợi ích cho sức khỏe."</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>const modal = document.getElementById('vocabModal');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const modalWord = document.getElementById('modalWord');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const modalPhonetic = document.getElementById('modalPhonetic');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const modalMeaning = document.getElementById('modalMeaning');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const modalExampleEn = document.getElementById('modalExampleEn');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const modalExampleVi = document.getElementById('modalExampleVi');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const btnClose = document.getElementById('btnClose');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.querySelectorAll('.vocab').forEach(el =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>el.addEventListener('click', (e) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const key = el.getAttribute('data-word');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const item = dictionary[key];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>if (item) {</p>
-<p class="p1"><span class="Apple-converted-space">          </span>modalWord.textContent = key;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>modalPhonetic.textContent = item.phonetic;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>modalMeaning.textContent = item.meaning;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>modalExampleEn.textContent = `"${item.exampleEn}"`;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>modalExampleVi.textContent = item.exampleVi;</p>
-<p class="p1"><span class="Apple-converted-space">          </span>modal.classList.add('active');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">      </span>});</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>btnClose.addEventListener('click', () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>modal.classList.remove('active');</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>modal.addEventListener('click', (e) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (e.target === modal) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>modal.classList.remove('active');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>document.addEventListener('keydown', (e) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>if (e.key === 'Escape') {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>modal.classList.remove('active');</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>});</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+  <header>
+    <h1>Japan Explorer & English Guide</h1>
+    <p>Cẩm nang du lịch Nhật Bản tương tác. Chạm vào bất kỳ từ tiếng Anh có viền xanh để xem giải nghĩa và ví dụ mẫu!</p>
+    <div class="badge-tip">💡 Tap on blue highlighted words to learn vocabulary!</div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>🗾 Where Is Japan Located in Asia?</h2>
+      <p>
+        Japan is a country in <strong>East Asia</strong> with a <span class="vocab" data-word="total area">total area</span> of about 379,954 km². It is close to China, South Korea, Russia, and Taiwan. Japan is also part of the Pacific <span class="vocab" data-word="Ring of Fire">Ring of Fire</span> and has five main islands: <strong>Hokkaido, Honshu, Shikoku, Kyushu, and Okinawa</strong>. These islands <span class="vocab" data-word="attract">attract</span> many tourists every year.
+      </p>
+      <p>
+        One thing that makes visitors want to come back to Japan is the <span class="vocab" data-word="local people">local people</span>. Japanese people are known for being <span class="vocab" data-word="friendly">friendly</span>, <span class="vocab" data-word="helpful">helpful</span>, and <span class="vocab" data-word="polite">polite</span>.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>🌸 What Is the Best Time to Visit Japan?</h2>
+      <p>
+        Japan has four clear seasons because it is in a <span class="vocab" data-word="temperate climate">temperate climate</span> zone. However, the weather can be very different from one area to another. For example, winters in northern Hokkaido can be very cold, while the islands in southern Okinawa are warm and sunny.
+      </p>
+      <p>
+        In general, <strong>March to May</strong> and <strong>September to November</strong> are considered good times to visit Japan.
+      </p>
+      <p>
+        If you want to see beautiful <span class="vocab" data-word="cherry blossoms">cherry blossoms</span> and enjoy the cool weather after winter, visit Japan from <strong>late March to early April</strong>.
+      </p>
+      <p>
+        If you want to enjoy cool autumn weather, clear blue skies, soft sunlight, and colorful <span class="vocab" data-word="autumn leaves">autumn leaves</span>, <strong>late October to early November</strong> is a good time to visit.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>🛂 Do You Need a Visa to Visit Japan?</h2>
+      <p>
+        Yes. Vietnamese citizens need a visa to visit Japan because Japan does not have a <span class="vocab" data-word="visa-free policy">visa-free policy</span> for Vietnamese citizens.
+      </p>
+      <p>
+        You need to <span class="vocab" data-word="apply for">apply for</span> a tourist visa before your trip. According to the information in this guide, you only need to pay the visa fee after your visa application is successful.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>✈️️ Tips for Booking a Flight to Japan</h2>
+      <p>
+        Plan your travel dates early and book your flight about <strong>one to two months before your trip</strong>. Choose a <span class="vocab" data-word="direct flight">direct flight</span> to save travel time.
+      </p>
+      <ul>
+        <li>Check <span class="vocab" data-word="special offers">special offers</span> from different airlines.</li>
+        <li>Look for <span class="vocab" data-word="discounts">discounts</span> and good deals.</li>
+      </ul>
+      <p>Round-trip flights from Hanoi/HCMC to Tokyo range from 9,000,000 to 14,000,000 VND.</p>
+    </section>
+
+    <section class="card">
+      <h2>🚆 Transportation in Japan</h2>
+      <h3>1. Subway</h3>
+      <p>
+        The subway is <span class="vocab" data-word="affordable">affordable</span> and <span class="vocab" data-word="on time">on time</span>. Be mindful of the morning and evening <span class="vocab" data-word="rush hour">rush hour</span> in Tokyo.
+      </p>
+      <h3>2. Bus & Passes</h3>
+      <p>
+        Use <span class="vocab" data-word="IC cards">IC cards</span> (Suica, Pasmo) or a <span class="vocab" data-word="One-Day Pass">One-Day Pass</span> for convenience. A <span class="vocab" data-word="JR Pass">JR Pass</span> is ideal for cross-city travel.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>⛩️ Famous Places to Visit</h2>
+      <ul>
+        <li><strong>Shibuya Crossing:</strong> View the busy scramble from the <span class="vocab" data-word="observatory">observatory</span> deck at Shibuya Sky.</li>
+        <li><strong>Mount Fuji:</strong> 3,776m tall, best viewed from Lake Kawaguchi.</li>
+        <li><strong>Blue Cave, Okinawa:</strong> Famous for coral reefs and <span class="vocab" data-word="snorkeling">snorkeling</span>.</li>
+        <li><strong>Fushimi Inari Taisha:</strong> Walk through over 10,000 red <span class="vocab" data-word="torii gates">torii gates</span>.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>🍣 Famous Japanese Food</h2>
+      <ul>
+        <li><strong>Sushi:</strong> Prepared with seasoned <span class="vocab" data-word="vinegar rice">vinegar rice</span> and fresh seafood.</li>
+        <li><strong>Sashimi:</strong> Fresh <span class="vocab" data-word="raw seafood">raw seafood</span> served with wasabi.</li>
+        <li><strong>Natto:</strong> Nutritious <span class="vocab" data-word="fermented soybeans">fermented soybeans</span> with a unique aroma.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>📅 Suggested 7-Day Itinerary</h2>
+      <div class="itinerary-day"><strong>Day 1:</strong> Tokyo arrival ➔ Shinjuku & dinner.</div>
+      <div class="itinerary-day"><strong>Day 2:</strong> Asakusa, Tokyo Skytree, Harajuku & Shibuya.</div>
+      <div class="itinerary-day"><strong>Day 3:</strong> Mount Fuji (Kawaguchiko) & traditional ryokan.</div>
+      <div class="itinerary-day"><strong>Day 4:</strong> Shinkansen to Kyoto ➔ Fushimi Inari & Arashiyama.</div>
+      <div class="itinerary-day"><strong>Day 5:</strong> Nara Park deer ➔ Osaka.</div>
+      <div class="itinerary-day"><strong>Day 6:</strong> Universal Studios Japan or Dotonbori.</div>
+      <div class="itinerary-day"><strong>Day 7:</strong> Osaka shopping ➔ Kansai Airport departure.</div>
+      <p style="margin-top: 14px;"><strong>Estimated Budget:</strong> ~28,000,000 - 35,000,000 VND / person.</p>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="vocabModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h3 id="modalWord">Word</h3>
+          <div class="phonetic" id="modalPhonetic">/phonetic/</div>
+        </div>
+        <button class="btn-close" id="btnClose">&times;</button>
+      </div>
+      <div class="detail-section">
+        <div class="detail-label">Nghĩa tiếng Việt</div>
+        <div class="meaning-vi" id="modalMeaning">Nghĩa của từ</div>
+      </div>
+      <div class="detail-section" style="border-left-color: #10b981;">
+        <div class="detail-label">Ví dụ tiếng Anh (Example)</div>
+        <div class="example-en" id="modalExampleEn">"Example sentence."</div>
+        <div class="example-vi" id="modalExampleVi">Dịch nghĩa câu ví dụ.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const dictionary = {
+      "total area": { phonetic: "/ˈtoʊ.t̬əl ˈer.i.ə/", meaning: "Tổng diện tích", exampleEn: "The total area exceeds 500 square kilometers.", exampleVi: "Tổng diện tích vượt quá 500 ki-lô-mét vuông." },
+      "Ring of Fire": { phonetic: "/rɪŋ əv faɪr/", meaning: "Vành đai lửa Thái Bình Dương", exampleEn: "Japan lies on the Pacific Ring of Fire.", exampleVi: "Nhật Bản nằm trên Vành đai lửa Thái Bình Dương." },
+      "attract": { phonetic: "/əˈtrækt/", meaning: "Thu hút, lôi cuốn", exampleEn: "Ancient temples attract millions of tourists.", exampleVi: "Những ngôi đền cổ thu hút hàng triệu du khách." },
+      "local people": { phonetic: "/ˈloʊ.kəl ˈpiː.pəl/", meaning: "Người dân địa phương", exampleEn: "Local people are very friendly.", exampleVi: "Người dân địa phương rất thân thiện." },
+      "friendly": { phonetic: "/ˈfrend.li/", meaning: "Thân thiện, cởi mở", exampleEn: "Everyone was warm and friendly.", exampleVi: "Mọi người đều rất ấm áp và thân thiện." },
+      "helpful": { phonetic: "/ˈhelp.fəl/", meaning: "Hay giúp đỡ, nhiệt tình", exampleEn: "The hotel staff were extremely helpful.", exampleVi: "Nhân viên khách sạn cực kỳ nhiệt tình." },
+      "polite": { phonetic: "/pəˈlaɪt/", meaning: "Lịch sự, nhã nhặn", exampleEn: "Bow gently to show polite manners.", exampleVi: "Cúi đầu nhẹ để thể hiện sự lịch sự." },
+      "temperate climate": { phonetic: "/ˈtem.pɚ.ət ˈklaɪ.mət/", meaning: "Khí hậu ôn đới", exampleEn: "Japan enjoys a temperate climate with four seasons.", exampleVi: "Nhật Bản có khí hậu ôn đới với bốn mùa rõ rệt." },
+      "cherry blossoms": { phonetic: "/ˈtʃer.i ˈblɑː.səmz/", meaning: "Hoa anh đào (Sakura)", exampleEn: "People enjoy picnics under the cherry blossoms.", exampleVi: "Mọi người đi dã ngoại dưới tán hoa anh đào." },
+      "autumn leaves": { phonetic: "/ˈɑː.t̬əm liːvz/", meaning: "Lá mùa thu, lá đỏ (Momiji)", exampleEn: "Kyoto is famous for red autumn leaves in November.", exampleVi: "Kyoto nổi tiếng với lá đỏ mùa thu vào tháng 11." },
+      "visa-free policy": { phonetic: "/ˈviː.zə friː ˈpɑː.lə.si/", meaning: "Chính sách miễn thị thực / visa", exampleEn: "Check Japan's visa-free policy before traveling.", exampleVi: "Kiểm tra chính sách miễn visa của Nhật trước khi đi." },
+      "apply for": { phonetic: "/əˈplaɪ fɔːr/", meaning: "Nộp hồ sơ, xin cấp", exampleEn: "Apply for your visa one month in advance.", exampleVi: "Hãy nộp hồ sơ xin visa trước một tháng." },
+      "direct flight": { phonetic: "/daɪˈrekt flaɪt/", meaning: "Chuyến bay thẳng", exampleEn: "A direct flight saves hours of waiting.", exampleVi: "Chuyến bay thẳng giúp tiết kiệm hàng giờ chờ đợi." },
+      "special offers": { phonetic: "/ˈspeʃ.əl ˈɑː.fɚz/", meaning: "Ưu đãi đặc biệt, khuyến mãi", exampleEn: "Look out for airlines' special offers.", exampleVi: "Hãy chú ý đến các ưu đãi đặc biệt của hãng bay." },
+      "discounts": { phonetic: "/ˈdɪs.kaʊnts/", meaning: "Mức giảm giá, chiết khấu", exampleEn: "Book early to get great discounts.", exampleVi: "Đặt sớm để nhận được mức giảm giá tốt." },
+      "affordable": { phonetic: "/əˈfɔːr.də.bəl/", meaning: "Giá cả phải chăng, vừa túi tiền", exampleEn: "Subway travel is fast and affordable.", exampleVi: "Đi tàu điện ngầm vừa nhanh vừa rẻ." },
+      "on time": { phonetic: "/ɑːn taɪm/", meaning: "Đúng giờ", exampleEn: "Japanese trains always arrive on time.", exampleVi: "Tàu hỏa Nhật Bản luôn đến đúng giờ." },
+      "rush hour": { phonetic: "/ˈrʌʃ ˌaʊ.ɚ/", meaning: "Giờ cao điểm", exampleEn: "Trains are packed during the morning rush hour.", exampleVi: "Tàu rất đông vào giờ cao điểm buổi sáng." },
+      "IC cards": { phonetic: "/aɪ siː kɑːrdz/", meaning: "Thẻ thanh toán thông minh (Suica/Pasmo)", exampleEn: "Tap your IC card at the gate.", exampleVi: "Chạm thẻ IC của bạn tại cửa kiểm soát." },
+      "One-Day Pass": { phonetic: "/wʌn deɪ pæs/", meaning: "Vé thông hành đi lại 1 ngày", exampleEn: "A One-Day Pass offers unlimited city bus rides.", exampleVi: "Vé một ngày cho phép đi xe buýt không giới hạn." },
+      "JR Pass": { phonetic: "/dʒeɪ ɑːr pæs/", meaning: "Thẻ đường sắt toàn Nhật Bản", exampleEn: "Activate your JR Pass before boarding.", exampleVi: "Kích hoạt vé JR Pass trước khi lên tàu." },
+      "observatory": { phonetic: "/əbˈzɝː.və.tɔːr.i/", meaning: "Đài quan sát", exampleEn: "Enjoy panoramic views from the observatory.", exampleVi: "Ngắm toàn cảnh từ đài quan sát." },
+      "snorkeling": { phonetic: "/ˈsnɔːr.kəl.ɪŋ/", meaning: "Lặn với ống thở", exampleEn: "Okinawa is ideal for diving and snorkeling.", exampleVi: "Okinawa rất lý tưởng để lặn biển và lặn với ống thở." },
+      "torii gates": { phonetic: "/ˈtɔːr.iː ɡeɪts/", meaning: "Cổng đền Torii đỏ truyền thống", exampleEn: "Walk through thousands of red torii gates.", exampleVi: "Đi qua hàng ngàn chiếc cổng torii đỏ." },
+      "vinegar rice": { phonetic: "/ˈvɪn.ə.ɡɚ raɪs/", meaning: "Cơm trộn giấm làm sushi", exampleEn: "Sushi uses freshly prepared vinegar rice.", exampleVi: "Sushi sử dụng cơm trộn giấm mới nấu." },
+      "raw seafood": { phonetic: "/rɑː ˈsiː.fuːd/", meaning: "Hải sản sống / tươi sống", exampleEn: "Sashimi consists of sliced raw seafood.", exampleVi: "Sashimi gồm những lát hải sản tươi sống." },
+      "fermented soybeans": { phonetic: "/fɚˈmen.t̬ɪd ˈsɔɪ.biːnz/", meaning: "Đậu nành lên men (Natto)", exampleEn: "Natto is made from healthy fermented soybeans.", exampleVi: "Natto được làm từ đậu nành lên men tốt cho sức khỏe." }
+    };
+
+    const modal = document.getElementById('vocabModal');
+    const modalWord = document.getElementById('modalWord');
+    const modalPhonetic = document.getElementById('modalPhonetic');
+    const modalMeaning = document.getElementById('modalMeaning');
+    const modalExampleEn = document.getElementById('modalExampleEn');
+    const modalExampleVi = document.getElementById('modalExampleVi');
+    const btnClose = document.getElementById('btnClose');
+
+    document.querySelectorAll('.vocab').forEach(el => {
+      el.addEventListener('click', () => {
+        const key = el.getAttribute('data-word');
+        const item = dictionary[key];
+        if (item) {
+          modalWord.textContent = key;
+          modalPhonetic.textContent = item.phonetic;
+          modalMeaning.textContent = item.meaning;
+          modalExampleEn.textContent = `"${item.exampleEn}"`;
+          modalExampleVi.textContent = item.exampleVi;
+          modal.classList.add('active');
+        }
+      });
+    });
+
+    btnClose.addEventListener('click', () => modal.classList.remove('active'));
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
+  </script>
 </body>
 </html>
