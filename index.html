@@ -6,10 +6,11 @@
   <title>Japan Travel Guide & English Learning</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+JP:wght@600&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #c9302c;
+      --primary-hover: #a12320;
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --text: #1e293b;
@@ -18,8 +19,10 @@
       --accent: #0284c7;
       --accent-bg: #e0f2fe;
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -2px rgba(0,0,0,0.06);
       --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.05);
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -28,6 +31,7 @@
       line-height: 1.75;
       padding: 0 16px 80px;
     }
+
     header {
       max-width: 900px;
       margin: 40px auto 32px;
@@ -37,13 +41,19 @@
       border-radius: 20px;
       border: 1px solid #fecaca;
     }
+
     header h1 {
-      font-size: 2.2rem;
+      font-size: 2.25rem;
       color: var(--primary);
       margin-bottom: 12px;
       font-weight: 800;
     }
-    header p { color: var(--text-muted); font-size: 1.05rem; }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
     .badge-tip {
       display: inline-block;
       margin-top: 14px;
@@ -55,6 +65,7 @@
       font-size: 0.875rem;
       font-weight: 600;
     }
+
     main {
       max-width: 900px;
       margin: 0 auto;
@@ -62,6 +73,7 @@
       flex-direction: column;
       gap: 24px;
     }
+
     .card {
       background: var(--card-bg);
       border-radius: 16px;
@@ -69,17 +81,35 @@
       border: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
     }
+
     .card h2 {
       font-size: 1.5rem;
       color: #0f172a;
       margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       border-bottom: 2px solid #f1f5f9;
       padding-bottom: 12px;
     }
-    .card h3 { font-size: 1.15rem; color: #334155; margin: 20px 0 10px; }
+
+    .card h3 {
+      font-size: 1.15rem;
+      color: #334155;
+      margin: 20px 0 10px;
+    }
+
     p { margin-bottom: 14px; }
-    ul { padding-left: 24px; margin-bottom: 16px; }
+    p:last-child { margin-bottom: 0; }
+
+    ul, ol {
+      padding-left: 24px;
+      margin-bottom: 16px;
+    }
+
     li { margin-bottom: 8px; }
+
+    /* Interactive Vocab Word */
     .vocab {
       color: var(--accent);
       background-color: var(--accent-bg);
@@ -88,10 +118,17 @@
       font-weight: 600;
       cursor: pointer;
       border-bottom: 1.5px dashed var(--accent);
-      transition: all 0.2s;
+      transition: all 0.2s ease;
       display: inline-block;
     }
-    .vocab:hover { background-color: #bae6fd; color: #0369a1; }
+
+    .vocab:hover, .vocab:focus {
+      background-color: #bae6fd;
+      color: #0369a1;
+      transform: translateY(-1px);
+    }
+
+    /* Modal / Popover */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -103,7 +140,9 @@
       z-index: 1000;
       padding: 20px;
     }
+
     .modal-overlay.active { display: flex; }
+
     .modal-content {
       background: #fff;
       border-radius: 20px;
@@ -112,15 +151,35 @@
       padding: 28px;
       box-shadow: var(--shadow-lg);
       position: relative;
+      animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       margin-bottom: 16px;
     }
-    .modal-title-group h3 { font-size: 1.6rem; color: var(--primary); font-weight: 800; }
-    .modal-title-group .phonetic { font-size: 0.95rem; color: var(--text-muted); font-family: monospace; }
+
+    .modal-title-group h3 {
+      font-size: 1.6rem;
+      color: var(--primary);
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .modal-title-group .phonetic {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-family: monospace;
+      margin-top: 2px;
+    }
+
     .btn-close {
       background: #f1f5f9;
       border: none;
@@ -128,9 +187,15 @@
       height: 32px;
       border-radius: 50%;
       cursor: pointer;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
     }
+    .btn-close:hover { background: #e2e8f0; color: #0f172a; }
+
     .detail-section {
       margin-top: 14px;
       background: #f8fafc;
@@ -138,16 +203,35 @@
       border-radius: 12px;
       border-left: 4px solid var(--accent);
     }
+
     .detail-label {
       font-size: 0.75rem;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
       font-weight: 700;
       color: var(--text-muted);
       margin-bottom: 4px;
     }
-    .meaning-vi { font-size: 1.15rem; font-weight: 600; color: #0f172a; }
-    .example-en { font-style: italic; color: #334155; margin-top: 6px; font-size: 0.95rem; }
-    .example-vi { color: #64748b; font-size: 0.875rem; margin-top: 2px; }
+
+    .meaning-vi {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .example-en {
+      font-style: italic;
+      color: #334155;
+      margin-top: 6px;
+      font-size: 0.95rem;
+    }
+
+    .example-vi {
+      color: #64748b;
+      font-size: 0.875rem;
+      margin-top: 2px;
+    }
+
     .itinerary-day {
       background: #fff1f2;
       border-left: 4px solid var(--primary);
@@ -158,6 +242,7 @@
   </style>
 </head>
 <body>
+
   <header>
     <h1>Japan Explorer & English Guide</h1>
     <p>Cẩm nang du lịch Nhật Bản tương tác. Chạm vào bất kỳ từ tiếng Anh có viền xanh để xem giải nghĩa và ví dụ mẫu!</p>
@@ -165,6 +250,7 @@
   </header>
 
   <main>
+    <!-- Section 1 -->
     <section class="card">
       <h2>🗾 Where Is Japan Located in Asia?</h2>
       <p>
@@ -175,6 +261,7 @@
       </p>
     </section>
 
+    <!-- Section 2 -->
     <section class="card">
       <h2>🌸 What Is the Best Time to Visit Japan?</h2>
       <p>
@@ -191,6 +278,7 @@
       </p>
     </section>
 
+    <!-- Section 3 -->
     <section class="card">
       <h2>🛂 Do You Need a Visa to Visit Japan?</h2>
       <p>
@@ -201,62 +289,105 @@
       </p>
     </section>
 
+    <!-- Section 4 -->
     <section class="card">
-      <h2>✈️️ Tips for Booking a Flight to Japan</h2>
+      <h2>✈️ Tips for Booking a Flight to Japan</h2>
       <p>
-        Plan your travel dates early and book your flight about <strong>one to two months before your trip</strong>. Choose a <span class="vocab" data-word="direct flight">direct flight</span> to save travel time.
+        There are many ways to find cheap flights to Japan. First, you should plan your travel dates early and book your flight about <strong>one to two months before your trip</strong>.
       </p>
+      <p>
+        You can also choose a <span class="vocab" data-word="direct flight">direct flight</span>. Direct flights may be more expensive, but they can save you time compared with flights that stop in another city.
+      </p>
+      <p>To find a good price, remember to:</p>
       <ul>
         <li>Check <span class="vocab" data-word="special offers">special offers</span> from different airlines.</li>
         <li>Look for <span class="vocab" data-word="discounts">discounts</span> and good deals.</li>
+        <li>Compare prices before buying a ticket.</li>
+        <li>Book your flight early.</li>
       </ul>
-      <p>Round-trip flights from Hanoi/HCMC to Tokyo range from 9,000,000 to 14,000,000 VND.</p>
+      <p>
+        Popular airlines include <em>Vietnam Airlines, Vietjet Air, Japan Airlines, and ANA</em>. A round-trip flight from Hanoi to Tokyo may cost around 12,000,000 to 13,000,000 VND, while a round-trip from Ho Chi Minh City costs around 9,000,000 to 14,000,000 VND.
+      </p>
     </section>
 
+    <!-- Section 5 -->
     <section class="card">
       <h2>🚆 Transportation in Japan</h2>
       <h3>1. Subway</h3>
       <p>
-        The subway is <span class="vocab" data-word="affordable">affordable</span> and <span class="vocab" data-word="on time">on time</span>. Be mindful of the morning and evening <span class="vocab" data-word="rush hour">rush hour</span> in Tokyo.
+        The subway is one of the most popular forms of <span class="vocab" data-word="public transportation">public transportation</span> in Japan because it is <span class="vocab" data-word="affordable">affordable</span>, clear, and usually <span class="vocab" data-word="on time">on time</span>. Pay attention to <span class="vocab" data-word="rush hour">rush hour</span> in Tokyo (7:30 - 9:00 a.m. & 5:00 - 7:00 p.m.).
       </p>
-      <h3>2. Bus & Passes</h3>
+
+      <h3>2. Bus</h3>
       <p>
-        Use <span class="vocab" data-word="IC cards">IC cards</span> (Suica, Pasmo) or a <span class="vocab" data-word="One-Day Pass">One-Day Pass</span> for convenience. A <span class="vocab" data-word="JR Pass">JR Pass</span> is ideal for cross-city travel.
+        There are two main types: <strong>local buses and long-distance buses</strong>. Most tourists use <span class="vocab" data-word="IC cards">IC cards</span> (such as Suica, PASMO, or ICOCA) because they make paying faster and easier. You can also purchase a <span class="vocab" data-word="One-Day Pass">One-Day Pass</span> for unlimited travel.
+      </p>
+
+      <h3>3. Taxi & Renting a Car</h3>
+      <p>
+        Compared with buses, taxis are quite expensive. <span class="vocab" data-word="Renting a car">Renting a car</span> gives you more freedom when traveling with close friends or family at your own pace.
+      </p>
+
+      <h3>JR Pass</h3>
+      <p>
+        With a <span class="vocab" data-word="JR Pass">JR Pass</span>, you can travel easily around Japan on JR train networks across multiple regions.
       </p>
     </section>
 
+    <!-- Section 6 -->
     <section class="card">
       <h2>⛩️ Famous Places to Visit</h2>
       <ul>
-        <li><strong>Shibuya Crossing:</strong> View the busy scramble from the <span class="vocab" data-word="observatory">observatory</span> deck at Shibuya Sky.</li>
-        <li><strong>Mount Fuji:</strong> 3,776m tall, best viewed from Lake Kawaguchi.</li>
-        <li><strong>Blue Cave, Okinawa:</strong> Famous for coral reefs and <span class="vocab" data-word="snorkeling">snorkeling</span>.</li>
-        <li><strong>Fushimi Inari Taisha:</strong> Walk through over 10,000 red <span class="vocab" data-word="torii gates">torii gates</span>.</li>
+        <li><strong>Shibuya Crossing, Tokyo:</strong> Famous scramble crossing with a lively view from <span class="vocab" data-word="observatory">Shibuya Sky</span>.</li>
+        <li><strong>Mount Fuji:</strong> Japan's highest mountain (3,776m). Popular route: Yoshida Trail or view from Lake Kawaguchi.</li>
+        <li><strong>Onna Village Blue Cave, Okinawa:</strong> A natural sea cave famous for <span class="vocab" data-word="snorkeling">diving and snorkeling</span>.</li>
+        <li><strong>Taketomi Island, Okinawa:</strong> White sandy roads, red-roof houses, and water buffalo carts.</li>
+        <li><strong>Shirakawa Village:</strong> Traditional houses with steep thatched roofs and historic architecture.</li>
+        <li><strong>Tokyo Skytree:</strong> Impressive 634-meter tall landmark with panoramic city views.</li>
+        <li><strong>Tokyo Imperial Palace:</strong> The serene residence of the Japanese Imperial Family.</li>
+        <li><strong>Sensoji Temple:</strong> Tokyo's oldest temple with a vibrant 200m shopping street.</li>
+        <li><strong>Osaka Castle:</strong> Famous green roof, white walls, and over 600 cherry trees.</li>
+        <li><strong>Arashiyama Bamboo Forest, Kyoto:</strong> A peaceful atmosphere with towering green bamboo.</li>
+        <li><strong>Todai-ji Temple, Nara:</strong> Giant bronze Buddha statue located in Nara Park among wild deer.</li>
+        <li><strong>Himeji Castle:</strong> Nicknamed “White Heron Castle”, a UNESCO World Heritage Site.</li>
+        <li><strong>Kobe Harborland:</strong> Scenic waterfront, Port Wheel, and romantic evening sea breezes.</li>
+        <li><strong>Fushimi Inari Taisha:</strong> Famous shrine with over 10,000 vibrant red <span class="vocab" data-word="torii gates">torii gates</span>.</li>
       </ul>
     </section>
 
+    <!-- Section 7 -->
     <section class="card">
       <h2>🍣 Famous Japanese Food</h2>
+      <p>
+        Japanese food is known for fresh ingredients, careful presentation, and delicate flavors:
+      </p>
       <ul>
         <li><strong>Sushi:</strong> Prepared with seasoned <span class="vocab" data-word="vinegar rice">vinegar rice</span> and fresh seafood.</li>
-        <li><strong>Sashimi:</strong> Fresh <span class="vocab" data-word="raw seafood">raw seafood</span> served with wasabi.</li>
-        <li><strong>Natto:</strong> Nutritious <span class="vocab" data-word="fermented soybeans">fermented soybeans</span> with a unique aroma.</li>
+        <li><strong>Sashimi:</strong> Fresh <span class="vocab" data-word="raw seafood">raw seafood</span> served with wasabi and soy sauce.</li>
+        <li><strong>Sake:</strong> Traditional brewed rice wine, served warm in winter and chilled in summer.</li>
+        <li><strong>Ramen:</strong> Rich broth noodles with pork, eggs, and regional toppings.</li>
+        <li><strong>Tempura:</strong> Seafood and vegetables coated in light batter and fried crispy.</li>
+        <li><strong>Takoyaki:</strong> Crispy exterior, tender octopus balls from Osaka.</li>
+        <li><strong>Natto:</strong> <span class="vocab" data-word="fermented soybeans">Fermented soybeans</span> with a distinct aroma and rich nutrition.</li>
+        <li><strong>Miso Soup:</strong> Essential soup made with miso paste and dashi stock.</li>
       </ul>
     </section>
 
+    <!-- Section 8 -->
     <section class="card">
-      <h2>📅 Suggested 7-Day Itinerary</h2>
-      <div class="itinerary-day"><strong>Day 1:</strong> Tokyo arrival ➔ Shinjuku & dinner.</div>
+      <h2>📅 Suggested 7-Day Japan Itinerary</h2>
+      <div class="itinerary-day"><strong>Day 1:</strong> Fly to Tokyo ➔ Shinjuku & dinner at Omoide Yokocho.</div>
       <div class="itinerary-day"><strong>Day 2:</strong> Asakusa, Tokyo Skytree, Harajuku & Shibuya.</div>
-      <div class="itinerary-day"><strong>Day 3:</strong> Mount Fuji (Kawaguchiko) & traditional ryokan.</div>
-      <div class="itinerary-day"><strong>Day 4:</strong> Shinkansen to Kyoto ➔ Fushimi Inari & Arashiyama.</div>
-      <div class="itinerary-day"><strong>Day 5:</strong> Nara Park deer ➔ Osaka.</div>
-      <div class="itinerary-day"><strong>Day 6:</strong> Universal Studios Japan or Dotonbori.</div>
-      <div class="itinerary-day"><strong>Day 7:</strong> Osaka shopping ➔ Kansai Airport departure.</div>
-      <p style="margin-top: 14px;"><strong>Estimated Budget:</strong> ~28,000,000 - 35,000,000 VND / person.</p>
+      <div class="itinerary-day"><strong>Day 3:</strong> Mount Fuji (Kawaguchiko), Chureito Pagoda & traditional onsen ryokan.</div>
+      <div class="itinerary-day"><strong>Day 4:</strong> Shinkansen to Kyoto ➔ Fushimi Inari, Gion & Arashiyama Bamboo Forest.</div>
+      <div class="itinerary-day"><strong>Day 5:</strong> Nara Park & Todai-ji Temple ➔ Osaka in the afternoon.</div>
+      <div class="itinerary-day"><strong>Day 6:</strong> Universal Studios Japan or explore Dotonbori & Shinsekai.</div>
+      <div class="itinerary-day"><strong>Day 7:</strong> Shopping in Osaka ➔ Kansai Airport ➔ Return flight.</div>
+      <p style="margin-top: 14px;"><strong>Estimated Budget:</strong> ~28,000,000 to 35,000,000 VND / person.</p>
     </section>
   </main>
 
+  <!-- Interactive Popup Modal -->
   <div class="modal-overlay" id="vocabModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -266,13 +397,15 @@
         </div>
         <button class="btn-close" id="btnClose">&times;</button>
       </div>
+
       <div class="detail-section">
         <div class="detail-label">Nghĩa tiếng Việt</div>
         <div class="meaning-vi" id="modalMeaning">Nghĩa của từ</div>
       </div>
+
       <div class="detail-section" style="border-left-color: #10b981;">
         <div class="detail-label">Ví dụ tiếng Anh (Example)</div>
-        <div class="example-en" id="modalExampleEn">"Example sentence."</div>
+        <div class="example-en" id="modalExampleEn">"Example sentence goes here."</div>
         <div class="example-vi" id="modalExampleVi">Dịch nghĩa câu ví dụ.</div>
       </div>
     </div>
@@ -280,33 +413,180 @@
 
   <script>
     const dictionary = {
-      "total area": { phonetic: "/ˈtoʊ.t̬əl ˈer.i.ə/", meaning: "Tổng diện tích", exampleEn: "The total area exceeds 500 square kilometers.", exampleVi: "Tổng diện tích vượt quá 500 ki-lô-mét vuông." },
-      "Ring of Fire": { phonetic: "/rɪŋ əv faɪr/", meaning: "Vành đai lửa Thái Bình Dương", exampleEn: "Japan lies on the Pacific Ring of Fire.", exampleVi: "Nhật Bản nằm trên Vành đai lửa Thái Bình Dương." },
-      "attract": { phonetic: "/əˈtrækt/", meaning: "Thu hút, lôi cuốn", exampleEn: "Ancient temples attract millions of tourists.", exampleVi: "Những ngôi đền cổ thu hút hàng triệu du khách." },
-      "local people": { phonetic: "/ˈloʊ.kəl ˈpiː.pəl/", meaning: "Người dân địa phương", exampleEn: "Local people are very friendly.", exampleVi: "Người dân địa phương rất thân thiện." },
-      "friendly": { phonetic: "/ˈfrend.li/", meaning: "Thân thiện, cởi mở", exampleEn: "Everyone was warm and friendly.", exampleVi: "Mọi người đều rất ấm áp và thân thiện." },
-      "helpful": { phonetic: "/ˈhelp.fəl/", meaning: "Hay giúp đỡ, nhiệt tình", exampleEn: "The hotel staff were extremely helpful.", exampleVi: "Nhân viên khách sạn cực kỳ nhiệt tình." },
-      "polite": { phonetic: "/pəˈlaɪt/", meaning: "Lịch sự, nhã nhặn", exampleEn: "Bow gently to show polite manners.", exampleVi: "Cúi đầu nhẹ để thể hiện sự lịch sự." },
-      "temperate climate": { phonetic: "/ˈtem.pɚ.ət ˈklaɪ.mət/", meaning: "Khí hậu ôn đới", exampleEn: "Japan enjoys a temperate climate with four seasons.", exampleVi: "Nhật Bản có khí hậu ôn đới với bốn mùa rõ rệt." },
-      "cherry blossoms": { phonetic: "/ˈtʃer.i ˈblɑː.səmz/", meaning: "Hoa anh đào (Sakura)", exampleEn: "People enjoy picnics under the cherry blossoms.", exampleVi: "Mọi người đi dã ngoại dưới tán hoa anh đào." },
-      "autumn leaves": { phonetic: "/ˈɑː.t̬əm liːvz/", meaning: "Lá mùa thu, lá đỏ (Momiji)", exampleEn: "Kyoto is famous for red autumn leaves in November.", exampleVi: "Kyoto nổi tiếng với lá đỏ mùa thu vào tháng 11." },
-      "visa-free policy": { phonetic: "/ˈviː.zə friː ˈpɑː.lə.si/", meaning: "Chính sách miễn thị thực / visa", exampleEn: "Check Japan's visa-free policy before traveling.", exampleVi: "Kiểm tra chính sách miễn visa của Nhật trước khi đi." },
-      "apply for": { phonetic: "/əˈplaɪ fɔːr/", meaning: "Nộp hồ sơ, xin cấp", exampleEn: "Apply for your visa one month in advance.", exampleVi: "Hãy nộp hồ sơ xin visa trước một tháng." },
-      "direct flight": { phonetic: "/daɪˈrekt flaɪt/", meaning: "Chuyến bay thẳng", exampleEn: "A direct flight saves hours of waiting.", exampleVi: "Chuyến bay thẳng giúp tiết kiệm hàng giờ chờ đợi." },
-      "special offers": { phonetic: "/ˈspeʃ.əl ˈɑː.fɚz/", meaning: "Ưu đãi đặc biệt, khuyến mãi", exampleEn: "Look out for airlines' special offers.", exampleVi: "Hãy chú ý đến các ưu đãi đặc biệt của hãng bay." },
-      "discounts": { phonetic: "/ˈdɪs.kaʊnts/", meaning: "Mức giảm giá, chiết khấu", exampleEn: "Book early to get great discounts.", exampleVi: "Đặt sớm để nhận được mức giảm giá tốt." },
-      "affordable": { phonetic: "/əˈfɔːr.də.bəl/", meaning: "Giá cả phải chăng, vừa túi tiền", exampleEn: "Subway travel is fast and affordable.", exampleVi: "Đi tàu điện ngầm vừa nhanh vừa rẻ." },
-      "on time": { phonetic: "/ɑːn taɪm/", meaning: "Đúng giờ", exampleEn: "Japanese trains always arrive on time.", exampleVi: "Tàu hỏa Nhật Bản luôn đến đúng giờ." },
-      "rush hour": { phonetic: "/ˈrʌʃ ˌaʊ.ɚ/", meaning: "Giờ cao điểm", exampleEn: "Trains are packed during the morning rush hour.", exampleVi: "Tàu rất đông vào giờ cao điểm buổi sáng." },
-      "IC cards": { phonetic: "/aɪ siː kɑːrdz/", meaning: "Thẻ thanh toán thông minh (Suica/Pasmo)", exampleEn: "Tap your IC card at the gate.", exampleVi: "Chạm thẻ IC của bạn tại cửa kiểm soát." },
-      "One-Day Pass": { phonetic: "/wʌn deɪ pæs/", meaning: "Vé thông hành đi lại 1 ngày", exampleEn: "A One-Day Pass offers unlimited city bus rides.", exampleVi: "Vé một ngày cho phép đi xe buýt không giới hạn." },
-      "JR Pass": { phonetic: "/dʒeɪ ɑːr pæs/", meaning: "Thẻ đường sắt toàn Nhật Bản", exampleEn: "Activate your JR Pass before boarding.", exampleVi: "Kích hoạt vé JR Pass trước khi lên tàu." },
-      "observatory": { phonetic: "/əbˈzɝː.və.tɔːr.i/", meaning: "Đài quan sát", exampleEn: "Enjoy panoramic views from the observatory.", exampleVi: "Ngắm toàn cảnh từ đài quan sát." },
-      "snorkeling": { phonetic: "/ˈsnɔːr.kəl.ɪŋ/", meaning: "Lặn với ống thở", exampleEn: "Okinawa is ideal for diving and snorkeling.", exampleVi: "Okinawa rất lý tưởng để lặn biển và lặn với ống thở." },
-      "torii gates": { phonetic: "/ˈtɔːr.iː ɡeɪts/", meaning: "Cổng đền Torii đỏ truyền thống", exampleEn: "Walk through thousands of red torii gates.", exampleVi: "Đi qua hàng ngàn chiếc cổng torii đỏ." },
-      "vinegar rice": { phonetic: "/ˈvɪn.ə.ɡɚ raɪs/", meaning: "Cơm trộn giấm làm sushi", exampleEn: "Sushi uses freshly prepared vinegar rice.", exampleVi: "Sushi sử dụng cơm trộn giấm mới nấu." },
-      "raw seafood": { phonetic: "/rɑː ˈsiː.fuːd/", meaning: "Hải sản sống / tươi sống", exampleEn: "Sashimi consists of sliced raw seafood.", exampleVi: "Sashimi gồm những lát hải sản tươi sống." },
-      "fermented soybeans": { phonetic: "/fɚˈmen.t̬ɪd ˈsɔɪ.biːnz/", meaning: "Đậu nành lên men (Natto)", exampleEn: "Natto is made from healthy fermented soybeans.", exampleVi: "Natto được làm từ đậu nành lên men tốt cho sức khỏe." }
+      "total area": {
+        phonetic: "/ˈtoʊ.t̬əl ˈer.i.ə/",
+        meaning: "Tổng diện tích",
+        exampleEn: "The total area of the national park exceeds 500 square kilometers.",
+        exampleVi: "Tổng diện tích của vườn quốc gia này vượt quá 500 ki-lô-mét vuông."
+      },
+      "Ring of Fire": {
+        phonetic: "/rɪŋ əv faɪr/",
+        meaning: "Vành đai lửa (Thái Bình Dương - nơi có nhiều động đất/núi lửa)",
+        exampleEn: "Japan experiences frequent earthquakes because it lies on the Pacific Ring of Fire.",
+        exampleVi: "Nhật Bản thường xuyên gặp động đất vì nằm trên Vành đai lửa Thái Bình Dương."
+      },
+      "attract": {
+        phonetic: "/əˈtrækt/",
+        meaning: "Thu hút, lôi cuốn",
+        exampleEn: "Ancient temples in Kyoto attract millions of tourists each year.",
+        exampleVi: "Những ngôi đền cổ ở Kyoto thu hút hàng triệu du khách mỗi năm."
+      },
+      "local people": {
+        phonetic: "/ˈloʊ.kəl ˈpiː.pəl/",
+        meaning: "Người dân địa phương",
+        exampleEn: "The local people are always eager to give directions to travelers.",
+        exampleVi: "Người dân địa phương luôn sẵn lòng chỉ đường cho du khách."
+      },
+      "friendly": {
+        phonetic: "/ˈfrend.li/",
+        meaning: "Thân thiện, cởi mở",
+        exampleEn: "Everyone at the hostel was very warm and friendly.",
+        exampleVi: "Mọi người ở nhà nghỉ tập thể đều rất ấm áp và thân thiện."
+      },
+      "helpful": {
+        phonetic: "/ˈhelp.fəl/",
+        meaning: "Hay giúp đỡ, có ích",
+        exampleEn: "The hotel staff were extremely helpful during our stay.",
+        exampleVi: "Nhân viên khách sạn cực kỳ nhiệt tình giúp đỡ trong suốt kỳ nghỉ của chúng tôi."
+      },
+      "polite": {
+        phonetic: "/pəˈlaɪt/",
+        meaning: "Lịch sự, nhã nhặn",
+        exampleEn: "Bow gently when greeting someone to show polite manners.",
+        exampleVi: "Cúi đầu nhẹ khi chào ai đó để thể hiện thái độ lịch sự."
+      },
+      "temperate climate": {
+        phonetic: "/ˈtem.pɚ.ət ˈklaɪ.mət/",
+        meaning: "Khí hậu ôn đới",
+        exampleEn: "Most of Japan enjoys a temperate climate with four distinct seasons.",
+        exampleVi: "Phần lớn nước Nhật có khí hậu ôn đới với bốn mùa rõ rệt."
+      },
+      "cherry blossoms": {
+        phonetic: "/ˈtʃer.i ˈblɑː.səmz/",
+        meaning: "Hoa anh đào (Sakura)",
+        exampleEn: "People love having outdoor picnics under the cherry blossoms in spring.",
+        exampleVi: "Mọi người rất thích đi dã ngoại dưới tán hoa anh đào vào mùa xuân."
+      },
+      "autumn leaves": {
+        phonetic: "/ˈɑː.t̬əm liːvz/",
+        meaning: "Lá mùa thu, lá đỏ (Momiji)",
+        exampleEn: "Kyoto is famous for its vibrant red autumn leaves in November.",
+        exampleVi: "Kyoto nổi tiếng với sắc lá mùa thu đỏ rực vào tháng 11."
+      },
+      "visa-free policy": {
+        phonetic: "/ˈviː.zə friː ˈpɑː.lə.si/",
+        meaning: "Chính sách miễn thị thực / miễn visa",
+        exampleEn: "Check whether your country benefits from Japan's visa-free policy.",
+        exampleVi: "Hãy kiểm tra xem quốc gia của bạn có được hưởng chính sách miễn visa của Nhật không."
+      },
+      "apply for": {
+        phonetic: "/əˈplaɪ fɔːr/",
+        meaning: "Nộp hồ sơ, xin cấp (visa, học bổng, việc làm)",
+        exampleEn: "You should apply for your visa at least one month before your trip.",
+        exampleVi: "Bạn nên nộp hồ sơ xin visa ít nhất một tháng trước chuyến đi."
+      },
+      "direct flight": {
+        phonetic: "/daɪˈrekt flaɪt/",
+        meaning: "Chuyến bay thẳng",
+        exampleEn: "Taking a direct flight saves you hours of layover waiting.",
+        exampleVi: "Đi chuyến bay thẳng giúp bạn tiết kiệm hàng giờ chờ đợi quá cảnh."
+      },
+      "special offers": {
+        phonetic: "/ˈspeʃ.əl ˈɑː.fɚz/",
+        meaning: "Ưu đãi đặc biệt, khuyến mãi",
+        exampleEn: "Airlines often release special offers during flash sales.",
+        exampleVi: "Các hãng hàng không thường tung ra những ưu đãi đặc biệt trong các đợt giảm giá chớp nhoáng."
+      },
+      "discounts": {
+        phonetic: "/ˈdɪs.kaʊnts/",
+        meaning: "Mức giảm giá, chiết khấu",
+        exampleEn: "Early bookers can enjoy discounts of up to thirty percent.",
+        exampleVi: "Những người đặt sớm có thể nhận được mức giảm giá lên tới ba mươi phần trăm."
+      },
+      "public transportation": {
+        phonetic: "/ˌpʌb.lɪk ˌtræn.spɚˈteɪ.ʃən/",
+        meaning: "Phương tiện giao thông công cộng",
+        exampleEn: "Public transportation in Tokyo is punctual, clean, and safe.",
+        exampleVi: "Giao thông công cộng tại Tokyo rất đúng giờ, sạch sẽ và an toàn."
+      },
+      "affordable": {
+        phonetic: "/əˈfɔːr.də.bəl/",
+        meaning: "Giá cả phải chăng, vừa túi tiền",
+        exampleEn: "The subway is an affordable choice for budget travelers.",
+        exampleVi: "Tàu điện ngầm là một lựa chọn vừa túi tiền cho du khách tiết kiệm."
+      },
+      "on time": {
+        phonetic: "/ɑːn taɪm/",
+        meaning: "Đúng giờ",
+        exampleEn: "Japanese bullet trains are world-renowned for arriving on time.",
+        exampleVi: "Tàu cao tốc Nhật Bản nổi tiếng thế giới vì luôn đến đúng giờ."
+      },
+      "rush hour": {
+        phonetic: "/ˈrʌʃ ˌaʊ.ɚ/",
+        meaning: "Giờ cao điểm",
+        exampleEn: "Try to avoid boarding trains during the morning rush hour.",
+        exampleVi: "Hãy cố gắng tránh lên tàu vào giờ cao điểm buổi sáng."
+      },
+      "IC cards": {
+        phonetic: "/aɪ siː kɑːrdz/",
+        meaning: "Thẻ thanh toán thông minh tích hợp (Suica, Pasmo...)",
+        exampleEn: "Tap your IC card at the gate to quickly enter the station.",
+        exampleVi: "Chạm thẻ IC vào cổng để vào ga tàu một cách nhanh chóng."
+      },
+      "One-Day Pass": {
+        phonetic: "/wʌn deɪ pæs/",
+        meaning: "Vé thông hành 1 ngày (đi không giới hạn)",
+        exampleEn: "A One-Day Pass allows unlimited rides on local city buses.",
+        exampleVi: "Vé thông hành một ngày cho phép đi không giới hạn các tuyến xe buýt nội thành."
+      },
+      "Renting a car": {
+        phonetic: "/ˈren.tɪŋ ə kɑːr/",
+        meaning: "Thuê xe tự lái",
+        exampleEn: "Renting a car is ideal for exploring the countryside of Hokkaido.",
+        exampleVi: "Thuê xe ô tô rất lý tưởng để khám phá vùng nông thôn Hokkaido."
+      },
+      "JR Pass": {
+        phonetic: "/dʒeɪ ɑːr pæs/",
+        meaning: "Thẻ đường sắt toàn Nhật Bản (Japan Rail Pass)",
+        exampleEn: "Activate your JR Pass at the airport before boarding the Narita Express.",
+        exampleVi: "Kích hoạt vé JR Pass của bạn tại sân bay trước khi lên tàu Narita Express."
+      },
+      "observatory": {
+        phonetic: "/əbˈzɝː.və.tɔːr.i/",
+        meaning: "Đài quan sát / đài thiên văn",
+        exampleEn: "The observation deck offers a 360-degree panoramic view of Tokyo.",
+        exampleVi: "Đài quan sát mang đến góc nhìn toàn cảnh 360 độ ngắm trọn Tokyo."
+      },
+      "snorkeling": {
+        phonetic: "/ˈsnɔːr.kəl.ɪŋ/",
+        meaning: "Lặn với ống thở",
+        exampleEn: "The calm clear waters make Okinawa great for snorkeling.",
+        exampleVi: "Làn nước êm và trong vắt khiến Okinawa trở thành nơi tuyệt vời để lặn với ống thở."
+      },
+      "torii gates": {
+        phonetic: "/ˈtɔːr.iː ɡeɪts/",
+        meaning: "Cổng đền Thần đạo Torii truyền thống của Nhật Bản",
+        exampleEn: "The thousands of vermilion torii gates at Fushimi Inari lead up the sacred mountain.",
+        exampleVi: "Hàng ngàn chiếc cổng torii màu đỏ son tại Fushimi Inari dẫn lối lên ngọn núi thiêng."
+      },
+      "vinegar rice": {
+        phonetic: "/ˈvɪn.ə.ɡɚ raɪs/",
+        meaning: "Cơm trộn giấm (cơm làm sushi)",
+        exampleEn: "Authentic sushi requires perfectly seasoned vinegar rice.",
+        exampleVi: "Món sushi chuẩn vị đòi hỏi phần cơm trộn giấm được nêm nếm hoàn hảo."
+      },
+      "raw seafood": {
+        phonetic: "/rɑː ˈsiː.fuːd/",
+        meaning: "Hải sản sống / tươi sống",
+        exampleEn: "Sashimi highlights the pristine freshness of raw seafood.",
+        exampleVi: "Sashimi tôn vinh độ tươi ngon nguyên bản của các loại hải sản sống."
+      },
+      "fermented soybeans": {
+        phonetic: "/fɚˈmen.t̬ɪd ˈsɔɪ.biːnz/",
+        meaning: "Đậu nành lên men (món Natto)",
+        exampleEn: "Natto is made from fermented soybeans and is prized for its health benefits.",
+        exampleVi: "Natto được làm từ đậu nành lên men và rất được coi trọng nhờ lợi ích cho sức khỏe."
+      }
     };
 
     const modal = document.getElementById('vocabModal');
@@ -318,7 +598,7 @@
     const btnClose = document.getElementById('btnClose');
 
     document.querySelectorAll('.vocab').forEach(el => {
-      el.addEventListener('click', () => {
+      el.addEventListener('click', (e) => {
         const key = el.getAttribute('data-word');
         const item = dictionary[key];
         if (item) {
@@ -332,8 +612,21 @@
       });
     });
 
-    btnClose.addEventListener('click', () => modal.classList.remove('active'));
-    modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
+    btnClose.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        modal.classList.remove('active');
+      }
+    });
   </script>
 </body>
 </html>
